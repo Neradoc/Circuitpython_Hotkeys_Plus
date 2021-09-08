@@ -1,5 +1,5 @@
-# MACROPAD Hotkeys Plus example: Starting page with stuff
-from macro_actions import K, Type, Tone, Control
+# MACROPAD Hotkeys example: Universal Numpad
+from macro_actions import Shortcut, Type, Tone, Control
 import time
 
 def onoff(pad, key, idx):
@@ -26,9 +26,9 @@ app = {                    # REQUIRED dict, must be named 'app'
     'macros' : [           # List of button macros...
         # COLOR    LABEL    KEY SEQUENCE
         # 1st row ----------
-        (0x202000, '7', K("7")),
-        (0x202000, '8', K("8")),
-        (0x202000, '9', K("9")),
+        (0x202000, '7', Shortcut("7")),
+        (0x202000, '8', Shortcut("8")),
+        (0x202000, '9', Shortcut("9")),
         # 2nd row ----------
         (0x202000, 'V-', Control("VOLUME_DECREMENT")),
         (0x202000, 'V+', Control("VOLUME_INCREMENT")),
@@ -50,8 +50,8 @@ app = {                    # REQUIRED dict, must be named 'app'
             ("G6", 0.2), ("E6", 0.2), ("C6", 0.5),
         ) ),
         # 4th row ----------
-        (0x101010, 'a', K("A")),
-        (0x800000, 'M', K("SHIFT", "M")),
+        (0x101010, 'a', Shortcut("A")),
+        (0x800000, 'M', Shortcut("SHIFT", "M")),
         (0x101010, 'Hello', Type("Hello 123")),
         # Encoder button ---
         (0x000000, '', onoff)

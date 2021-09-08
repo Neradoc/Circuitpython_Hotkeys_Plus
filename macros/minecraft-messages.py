@@ -4,7 +4,7 @@
 #       to result in silent failure.  Therefore, the key sequences are split
 #       across multiple lines.
 
-from macro_actions import K, L
+from macro_actions import S, Type
 
 # NOTE: There appears to be some delay when bringing up the command screen.
 
@@ -21,17 +21,17 @@ app = {                              # REQUIRED dict, must be named 'app'
         # COLOR    LABEL    KEY SEQUENCE
         # 1st row ----------
         (0x000020, 'list', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("list"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("list"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         (0x000020, 'list', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("list"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("list"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         (0x000020, 'list', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("list"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("list"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         # 2nd row ----------
         (0x000000, '',     []),
         (0x000000, '',     []),
@@ -42,17 +42,17 @@ app = {                              # REQUIRED dict, must be named 'app'
         (0x000000, '',     []),
         # 4th row ----------
         (0x101010, 'bed', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("msg @a Time for bed!"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("msg @a Time for bed!"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         (0x101010, 'bed', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("msg @a Time for bed!"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("msg @a Time for bed!"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         (0x101010, 'bed', [
-            L("/"), DELAY_AFTER_SLASH,
-            L("msg @a Time for bed!"),
-            DELAY_BEFORE_RETURN, K("RETURN"), -K("RETURN")]),
+            Type("/"), DELAY_AFTER_SLASH,
+            Type("msg @a Time for bed!"),
+            DELAY_BEFORE_RETURN, S("RETURN"), -S("RETURN")]),
         # Encoder button ---
         (0x000000, '', [])
     ]

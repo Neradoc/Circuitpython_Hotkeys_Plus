@@ -14,13 +14,13 @@ Press and release a key with a keycode name as strings. It presses the key and o
 # long version, with key names
     (0x004000, 'Redo', [ Shortcut("COMMAND", "SHIFT", "Z") ]),
 # short version:
-    (0x004000, 'Undo', [ K("COMMAND", "Z") ]),
+    (0x004000, 'Undo', [ S("COMMAND", "Z") ]),
 # importing Keycode
     (0x004000, 'Undo Win', [ Shortcut(Keycode.CONTROL, Keycode.Z) ]),
 # releasing all (prefered)
-    (0x004000, 'Things', [ K("ALT", "A"), 0, K("ALT", "B") ]),
+    (0x004000, 'Things', [ S("ALT", "A"), 0, S("ALT", "B") ]),
 # releasing one (holding ALT)
-    (0x004000, 'Other', [ K("ALT", "A"), -K("A"), K("B") ]),
+    (0x004000, 'Other', [ S("ALT", "A"), -S("A"), S("B") ]),
 ```
 
 ### Type a string
@@ -29,7 +29,7 @@ Press and release a key with a keycode name as strings. It presses the key and o
 # long version
     (0x004000, 'Hello', [ Type("Hello world") ]),
 # short version
-    (0x004000, 'Taco', [ L(" :taco:") ]),
+    (0x004000, 'Taco', [ T(" :taco:") ]),
 ```
 
 ### Consumer Control keys
