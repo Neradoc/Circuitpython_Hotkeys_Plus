@@ -126,6 +126,7 @@ class K(MacroAction):
     Do multiple actions to press/release independently.
     The Keycode class used can be changed at the class level.
     Takes ints or converts strings using getattr on the Keycode class.
+    Defaults to layout.keycodes() if code not found.
     """
     keyboard = common_keyboard
     keycode = None

@@ -8,7 +8,7 @@ Action classes let you encapsulate actions with a class instance, serving as mar
 
 ### Shortcuts and Keycodes
 
-Press and release a key with a keycode name as strings. It presses the key and only releases it at the end of the macro, unless you specify to release in two ways: a negative shortcut, or `0`. Keycodes can also be represented with the Keycode.THING int.
+Press and release a key with a keycode name as strings. It presses the key and only releases it at the end of the macro, unless you specify to release in two ways: a negative shortcut, or `0`. Keycodes can also be represented with the Keycode.THING int. If the key code is not found, it defaults to `layout.keycodes()`.
 
 ```py
 # long version, with key names
@@ -30,6 +30,22 @@ Press and release a key with a keycode name as strings. It presses the key and o
     (0x004000, 'Hello', [ Type("Hello world") ]),
 # short version
     (0x004000, 'Taco', [ L(" :taco:") ]),
+```
+
+### Consumer Control keys
+
+The `consumer_control_extended` module can be found in the [Layout Repository](https://github.com/Neradoc/Circuitpython_Keyboard_Layouts) and contains a bunch of names for consumer control functions, basically dumped from the USB HID specifications. Some might even do something !
+
+```py
+# as strings
+    (0x202000, 'Volume-', Control("VOLUME_DECREMENT")),
+    (0x202000, 'Volume+', Control("VOLUME_INCREMENT")),
+# as int (start calculator)
+    (0x202000, 'Calc', Control(0x192)),
+# with ConsumerControlExtended
+from consumer_control_extended.ConsumerControlExtended import *
+...
+    (0x202000, 'Calc', Control(AL_CALCULATOR)),
 ```
 
 ### Midi notes
