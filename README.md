@@ -36,7 +36,7 @@ Press and release a key with a keycode name as strings. It presses the key and o
 
 ```py
 # midi notes as strings, with or without velocity (127 by default)
-    (0x004000, 'Hello', [ M( "A-1#", ("C1", 64) ) ]),
+    (0x004000, 'Hello', [ Midi( "A-1#", ("C1", 64) ) ]),
 # midi notes as numbers
     (0x004000, 'Taco', [ M( 10 ), M( (11, 100) ) ]),
 ```
