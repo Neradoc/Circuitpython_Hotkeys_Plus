@@ -69,7 +69,6 @@ def note_to_midi(code):
 
 def note_to_frequency(code):
     if isinstance(code, str):
-        print("-"*50)
         nn = code
         if "#" in code and (code[0] + "#") in BASE_NOTES_FREQ:
             note = BASE_NOTES_FREQ[code[0] + "#"]
@@ -80,7 +79,6 @@ def note_to_frequency(code):
         else:
             raise ValueError("Unknown note: "+repr(code))
         delta = 1
-        print(nn, note, code)
         if code[0] == "-":
             delta = -1
             code = code[1:]
@@ -89,7 +87,6 @@ def note_to_frequency(code):
                 note = note / (2 ** (int(code[0]) - 4))
             else:
                 note = note * (2 ** (int(code[0]) - 4))
-        print(code[0], delta, note)
         return note
     return code
 
@@ -120,7 +117,7 @@ class MacroAction:
     def __repr__(self):
         return ("-" if self.neg else "+") + repr(self.actions)
 
-class K(MacroAction):
+class Shortcut(MacroAction):
     """
     Action to press/release a list of keycodes together.
     Do multiple actions to press/release independently.
@@ -131,8 +128,8 @@ class K(MacroAction):
     keyboard = common_keyboard
     keycode = None
     def __init__(self, *actions, neg=False):
-        if K.keycode == None:
-            K.keycode = default_keycode()
+        if Shortcut.keycode == None:
+            Shortcut.keycode = default_keycode()
         acts = []
         for action in actions:
             if isinstance(action, int):
@@ -142,10 +139,10 @@ class K(MacroAction):
                     code = getattr(self.keycode, action)
                     acts.append(code)
                 elif len(action) == 1:
-                    L.layout = default_layout()
-                    acts += L.layout.keycodes(action)
+                    Type.layout = default_layout()
+                    acts += Type.layout.keycodes(action)
             else:
-                raise ValueError("Bad type of K action:" + repr(action))
+                raise ValueError("Bad type of Shortcut action:" + repr(action))
         super().__init__(*acts, neg=neg)
     def press(self):
         self.keyboard.press(*self.actions)
@@ -154,7 +151,7 @@ class K(MacroAction):
     def send(self):
         self.keyboard.send(*self.actions)
 
-class C(MacroAction):
+class Control(MacroAction):
     """
     Action to press/release a ConsumerControl key (only one at a time).
     """
@@ -165,7 +162,7 @@ class C(MacroAction):
         elif isinstance(action, str):
             code = getattr(ConsumerControlCode, action)
         else:
-            raise ValueError("Bad type of C action:" + repr(action))
+            raise ValueError("Bad type of Control action:" + repr(action))
         super().__init__(code, neg=neg)
     def press(self):
         self.control.press(*self.actions)
@@ -174,7 +171,7 @@ class C(MacroAction):
     def send(self):
         self.control.send(*self.actions)
 
-class M(MacroAction):
+class Midi(MacroAction):
     """
     Action to press/release a list of midi keys together.
     """
@@ -202,7 +199,7 @@ class M(MacroAction):
         time.sleep(RELEASE_DELAY)
         self.release()
 
-class L(MacroAction):
+class Type(MacroAction):
     """
     Action to write a string with a layout, use via a LayoutFactory,
     so you don't have to repeat the "layout" argument in your macros.
@@ -211,7 +208,7 @@ class L(MacroAction):
     def __init__(self, *actions, neg=False):
         super().__init__(*actions, neg=neg)
         if self.layout == None:
-            L.layout = default_layout()
+            Type.layout = default_layout()
     def press(self):
         for action in self.actions:
             self.layout.write(action)
@@ -273,7 +270,6 @@ class Tone(MacroAction):
     def press(self):
         for note, duration in self.actions:
             if note > 0:
-                print("Playing", note, duration)
                 Tone.play_tone(note, duration)
             else:
                 time.sleep(duration)
@@ -282,7 +278,7 @@ class Tone(MacroAction):
         pass
 
 # aliases
-Shortcut = K
-Control = C
-Type = L
-Midi = M
+S = Shortcut
+C = Control
+T = Type
+M = Midi
