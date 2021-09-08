@@ -82,7 +82,7 @@ app = {
 
 You can specify a function to be called when switching apps (macro pages), one when you enter, one when you leave. They take the MacroPad instance, the previous app and the current app (instances of App).
 
-```
+```py
 # beep when we start this page
 # restore the lights and screen when we leave it
 # or we won't know where we are when switching pages
@@ -123,7 +123,7 @@ app = {
 
 ## International keyboards support
 
-The keyboard layout and keycode to use can be configured in the `macros_config` file as such, with modules from the [Layout Repository](https://github.com/Neradoc/Circuitpython_Keyboard_Layouts).
+The keyboard layout and keycode can be configured in the `macros_config.py` file, with modules from the [Layout Repository](https://github.com/Neradoc/Circuitpython_Keyboard_Layouts).
 
 ```py
 from keyboard_layout_mac_fr import KeyboardLayout
