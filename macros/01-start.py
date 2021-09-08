@@ -1,4 +1,4 @@
-# MACROPAD Hotkeys example: Universal Numpad
+# MACROPAD Hotkeys Plus example: Starting page with stuff
 from macro_actions import K, Type, Tone, Control
 import time
 
