@@ -8,7 +8,7 @@ Action classes let you encapsulate actions with a class instance, serving as mar
 
 ### Shortcuts and Keycodes
 
-Press and release a key with a keycode name as strings. It presses the key and only releases it at the end of the macro, unless you specify to release in two ways: a negative shortcut, or `0`. Keycodes can also be represented with the Keycode.THING int. If the key code is not found, it defaults to `layout.keycodes()`.
+Press or release one or more keys with a keycode name as strings. It presses the key and only releases it at the end of the macro, unless you specify to release in two ways: a negative shortcut, or `0`. Keycodes can also be represented with the Keycode.THING int. If the key code is not found, it defaults to `layout.keycodes()`.
 
 ```py
 # long version, with key names
