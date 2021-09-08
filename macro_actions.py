@@ -18,6 +18,7 @@ BASE_NOTES_MIDI = { "C": 24, "D": 26, "E": 28, "F": 29, "G": 31, "A": 33, "B": 3
 BASE_NOTES_FREQ = { "C": 261.63, "C#": 277.18, "D": 293.66, "D#": 311.13, "E":  329.63, "F": 349.23, "F#": 369.99, "G": 392.00, "F#": 415.30, "A": 440.00, "A#": 466.16, "B": 493.88 }
 
 _default_keycode = None
+_default_layout = None
 
 def default_keycode():
     global _default_keycode
@@ -33,8 +34,6 @@ def default_keycode():
         from adafruit_hid import keycode
         _default_keycode = keycode.Keycode
         return _default_keycode
-
-_default_layout = None
 
 def default_layout():
     global _default_layout
@@ -72,9 +71,9 @@ def note_to_frequency(code):
     if isinstance(code, str):
         print("-"*50)
         nn = code
-        if len(code) > 1 and code[0:2] in BASE_NOTES_FREQ:
-            note = BASE_NOTES_FREQ[code[0:2]]
-            code = code[2:]
+        if "#" in code and (code[0] + "#") in BASE_NOTES_FREQ:
+            note = BASE_NOTES_FREQ[code[0] + "#"]
+            code = code[1:].replace("#", "")
         elif len(code) > 0 and code[0] in BASE_NOTES_FREQ:
             note = BASE_NOTES_FREQ[code[0]]
             code = code[1:]
@@ -220,31 +219,33 @@ class L(MacroAction):
     def send(self):
         self.press()
 
-class Color:
-    """
-    Encodes the default color of the button.
-    Encodes the temporary color when pressed, with -Color(x).
-    A color value can be:
-    - an int: 0xRRGGBB
-    - a css color: "#RRGGBB"
-    - a tuple (r, g, b)
-    """
-    def __init__(self, color, *, press=False):
-        self.press = press
-        if isinstance(color, tuple):
-            self.color = color
-        elif isinstance(color, int):
-            c = color
-            self.color = (c >> 16 & 0xFF, c >> 8 & 0xFF, c & 0xFF)
-        elif isinstance(color, str):
-            c = int(color.replace("#",""), 16)
-            self.color = (c >> 16 & 0xFF, c >> 8 & 0xFF, c & 0xFF)
-        else:
-            raise ValueError("Color value invalid, give tuple, int or hexa string")
-    def __repr__(self):
-        return ("+" if self.press else "-") + f"Color{self.color}"
-    def __neg__(self):
-        return self.__class__(self.color, press = not self.press)
+# Color not yet implemented for hotkeys.
+
+# class Color:
+#     """
+#     Encodes the default color of the button.
+#     Encodes the temporary color when pressed, with -Color(x).
+#     A color value can be:
+#     - an int: 0xRRGGBB
+#     - a css color: "#RRGGBB"
+#     - a tuple (r, g, b)
+#     """
+#     def __init__(self, color, *, press=False):
+#         self.press = press
+#         if isinstance(color, tuple):
+#             self.color = color
+#         elif isinstance(color, int):
+#             c = color
+#             self.color = (c >> 16 & 0xFF, c >> 8 & 0xFF, c & 0xFF)
+#         elif isinstance(color, str):
+#             c = int(color.replace("#",""), 16)
+#             self.color = (c >> 16 & 0xFF, c >> 8 & 0xFF, c & 0xFF)
+#         else:
+#             raise ValueError("Color value invalid, give tuple, int or hexa string")
+#     def __repr__(self):
+#         return ("+" if self.press else "-") + f"Color{self.color}"
+#     def __neg__(self):
+#         return self.__class__(self.color, press = not self.press)
 
 class Tone(MacroAction):
     """
