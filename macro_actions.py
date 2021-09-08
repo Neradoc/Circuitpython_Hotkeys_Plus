@@ -14,7 +14,8 @@ common_keyboard = Keyboard(usb_hid.devices)
 # config in macros_config.py
 RELEASE_DELAY = 0.02
 
-BASE_NOTES = { "C": 24, "D": 26, "E": 28, "F": 29, "G": 31, "A": 33, "B": 35 }
+BASE_NOTES_MIDI = { "C": 24, "D": 26, "E": 28, "F": 29, "G": 31, "A": 33, "B": 35 }
+BASE_NOTES_FREQ = { "C": 261.63, "C#": 277.18, "D": 293.66, "D#": 311.13, "E":  329.63, "F": 349.23, "F#": 369.99, "G": 392.00, "F#": 415.30, "A": 440.00, "A#": 466.16, "B": 493.88 }
 
 _default_keycode = None
 
@@ -50,10 +51,10 @@ def default_layout():
         _default_layout = keyboard_layout_us.KeyboardLayoutUS(common_keyboard)
         return _default_layout
 
-def code_to_note(code):
+def note_to_midi(code):
     if isinstance(code, str):
-        if len(code) and code[0] in BASE_NOTES:
-            note = BASE_NOTES[code[0]]
+        if len(code) and code[0] in BASE_NOTES_MIDI:
+            note = BASE_NOTES_MIDI[code[0]]
         else:
             raise ValueError("Unknown note: "+repr(code))
         delta = ""
@@ -64,6 +65,32 @@ def code_to_note(code):
                 note = note + 12 * int(delta + nn)
             if nn == "#":
                 note = note + 1
+        return note
+    return code
+
+def note_to_frequency(code):
+    if isinstance(code, str):
+        print("-"*50)
+        nn = code
+        if len(code) > 1 and code[0:2] in BASE_NOTES_FREQ:
+            note = BASE_NOTES_FREQ[code[0:2]]
+            code = code[2:]
+        elif len(code) > 0 and code[0] in BASE_NOTES_FREQ:
+            note = BASE_NOTES_FREQ[code[0]]
+            code = code[1:]
+        else:
+            raise ValueError("Unknown note: "+repr(code))
+        delta = 1
+        print(nn, note, code)
+        if code[0] == "-":
+            delta = -1
+            code = code[1:]
+        if code[0] in "012356789":  # don't change if 4
+            if delta < 0:
+                note = note / (2 ** (int(code[0]) - 4))
+            else:
+                note = note * (2 ** (int(code[0]) - 4))
+        print(code[0], delta, note)
         return note
     return code
 
@@ -157,11 +184,11 @@ class M(MacroAction):
         for data in actions:
             velocity = 127
             if isinstance(data, (tuple, list)):
-                note = code_to_note(data[0])
+                note = note_to_midi(data[0])
                 if len(data) > 1:
                     velocity = data[1]
             else:
-                note = code_to_note(data)
+                note = note_to_midi(data)
             acts.append( (note, velocity) )
         super().__init__(*acts, neg=neg)
     def press(self):
@@ -218,3 +245,42 @@ class Color:
         return ("+" if self.press else "-") + f"Color{self.color}"
     def __neg__(self):
         return self.__class__(self.color, press = not self.press)
+
+class Tone(MacroAction):
+    """
+    Action to play a tone - needs to be configured first.
+    macro_actions.Tone.play_tone = lambda note, duration: pad.play_tone(note, duration)
+    """
+    play_tone = None
+    def __init__(self, *actions, neg=False):
+        acts = []
+        for data in actions:
+            duration = 0.5
+            if isinstance(data, (tuple, list)):
+                note = note_to_frequency(data[0])
+                if len(data) > 1:
+                    duration = data[1]
+            elif isinstance(data, (int,float)):
+                note = 0
+                duration = data
+            else:
+                raise ValueError("Invalid note: "+repr(data)+" use tuple or number.")
+            acts.append( (note, duration) )
+        super().__init__(*acts, neg=neg)
+
+    def press(self):
+        for note, duration in self.actions:
+            if note > 0:
+                print("Playing", note, duration)
+                Tone.play_tone(note, duration)
+            else:
+                time.sleep(duration)
+
+    def release(self):
+        pass
+
+# aliases
+Shortcut = K
+Control = C
+Type = L
+Midi = M

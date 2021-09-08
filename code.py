@@ -16,7 +16,7 @@ import traceback
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_text import label
 from adafruit_macropad import MacroPad
-from macro_actions import MacroAction
+from macro_actions import MacroAction, Tone
 
 
 # CONFIGURABLES ------------------------
@@ -70,6 +70,11 @@ macropad = MacroPad()
 macropad.display.auto_refresh = False
 macropad.pixels.auto_write = False
 
+def play_tone(note, duration):
+    macropad.play_tone(note, duration)
+
+Tone.play_tone = play_tone
+
 # Set up displayio group with all the labels
 group = displayio.Group()
 for key_index in range(12):
@@ -106,10 +111,10 @@ if not apps:
     while True:
         pass
 
+# the last position being None makes the loop start with switching to a page
 last_position = None
 last_encoder_switch = macropad.encoder_switch_debounced.pressed
 app_index = 0
-apps[app_index].switch()
 
 
 # MAIN LOOP ----------------------------
