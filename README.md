@@ -53,6 +53,8 @@ Press and release a key with a keycode name as strings. It presses the key and o
     ),
 ```
 
+### Custom function calls
+
 Instead of an action, you can put a function, expecting 3 parameters, the Macropad Instance, the number of the key being pressed, the index of the action in the current macro's list.
 
 ```py
@@ -75,6 +77,8 @@ app = {
     ]
 }
 ```
+
+### Enter and leave
 
 You can specify a function to be called when switching apps (macro pages), one when you enter, one when you leave. They take the MacroPad instance, the previous app and the current app (instances of App).
 
@@ -102,7 +106,7 @@ app = {
 }
 ```
 
-Mixing:
+### Mixing
 
 ```py
 # type a blod string in some text editor, possibly, and beep
