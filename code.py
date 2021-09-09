@@ -16,7 +16,7 @@ import traceback
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_text import label
 from adafruit_macropad import MacroPad
-from macro_actions import MacroAction, Tone, Type, common_keyboard
+from macro_actions import MacroAction, Tone, Type
 
 
 # CONFIGURABLES ------------------------
@@ -57,6 +57,9 @@ class App:
                 macropad.pixels[i] = 0
                 group[i].text = ''
         macropad.keyboard.release_all()
+        macropad.consumer_control.release()
+        macropad.mouse.release_all()
+        macropad.stop_tone()
         macropad.pixels.show()
         macropad.display.refresh()
         # the current app's "enter" custom code
@@ -180,10 +183,10 @@ while True:
             elif isinstance(item, int):
                 # compatibility
                 if item > 0:
-                    common_keyboard.press(item)
+                    macropad.keyboard.press(item)
                     past_keycodes.add(item)
                 else:
-                    common_keyboard.release(item)
+                    macropad.keyboard.release(item)
                     past_keycodes.remove(item)
             elif isinstance(item, str):
                 # compatibility
@@ -197,7 +200,7 @@ while True:
                 item.release()
             # compatibility
             if isinstance(item, int) and item >= 0:
-                common_keyboard.release(item)
+                macropad.keyboard.release(item)
         if key_number < 12: # No pixel for encoder button
             macropad.pixels[key_number] = apps[app_index].macros[key_number][0]
             macropad.pixels.show()

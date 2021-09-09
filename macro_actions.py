@@ -8,7 +8,9 @@ from adafruit_midi.note_on import NoteOn
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 from adafruit_hid.keyboard import Keyboard
+import adafruit_hid.mouse
 
+common_mouse = adafruit_hid.mouse.Mouse(usb_hid.devices)
 common_keyboard = Keyboard(usb_hid.devices)
 
 # config in macros_config.py
@@ -281,6 +283,35 @@ class Tone(MacroAction):
 
     def release(self):
         pass
+
+class Mouse(MacroAction):
+    """
+    Action to press/release a mouse button or move the mouse.
+    """
+    def __init__(self, button=0, x=0, y=0, wheel=0, neg=False):
+        self.button = button
+        self.x = x
+        self.y = y
+        self.wheel = wheel
+        self.neg = neg
+    def press(self):
+        if self.button == 1:
+            common_mouse.press(adafruit_hid.mouse.Mouse.LEFT_BUTTON)
+        elif self.button == 2:
+            common_mouse.press(adafruit_hid.mouse.Mouse.RIGHT_BUTTON)
+        elif self.button == 3:
+            common_mouse.press(adafruit_hid.mouse.Mouse.MIDDLE_BUTTON)
+        common_mouse.move(self.x, self.y, self.wheel)
+    def release(self):
+        if self.button == 1:
+            common_mouse.release(adafruit_hid.mouse.Mouse.LEFT_BUTTON)
+        elif self.button == 2:
+            common_mouse.release(adafruit_hid.mouse.Mouse.RIGHT_BUTTON)
+        elif self.button == 3:
+            common_mouse.release(adafruit_hid.mouse.Mouse.MIDDLE_BUTTON)
+    def send(self):
+        self.press()
+        self.release()
 
 # aliases
 S = Shortcut

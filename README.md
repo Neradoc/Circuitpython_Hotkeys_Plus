@@ -48,6 +48,19 @@ from consumer_control_extended.ConsumerControlExtended import *
     (0x202000, 'Calc', Control(AL_CALCULATOR)),
 ```
 
+### Mouse
+
+Note that mouse movements are relative, and depend on the computer's setup. They are only done once on press and not repeated in this implementation. Mouse buttons are held until the macro key is released.
+
+```py
+# click 1 = left, 2 = right, 3 = middle
+    (0x202000, 'Click', Mouse(1)),
+# mouse move
+    (0x202000, 'Zipzap', Mouse(x=100, y=100)),
+# mouse wheel
+    (0x202000, 'Wheel+', Mouse(wheel=10)),
+```
+
 ### Midi notes
 
 ```py
