@@ -216,6 +216,11 @@ class Type(MacroAction):
         pass
     def send(self):
         self.press()
+    @classmethod
+    def write(text):
+        if self.layout == None:
+            Type.layout = default_layout()
+        Type.layout.write(text)
 
 # Color not yet implemented for hotkeys.
 

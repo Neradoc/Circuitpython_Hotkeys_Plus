@@ -16,7 +16,7 @@ import traceback
 from adafruit_display_shapes.rect import Rect
 from adafruit_display_text import label
 from adafruit_macropad import MacroPad
-from macro_actions import MacroAction, Tone
+from macro_actions import MacroAction, Tone, Type, common_keyboard
 
 
 # CONFIGURABLES ------------------------
@@ -164,6 +164,7 @@ while True:
             macropad.pixels[key_number] = 0xFFFFFF
             macropad.pixels.show()
         past_items = []
+        past_keycodes = set()  # for compatibility
         for index,item in enumerate(sequence):
             past_items.append(item)
             if item == 0:
@@ -176,17 +177,27 @@ while True:
                 time.sleep(item)
             elif callable(item):
                 item(pad=macropad, key=key_number, idx=index)
+            elif isinstance(item, int):
+                # compatibility
+                if item > 0:
+                    common_keyboard.press(item)
+                    past_keycodes.add(item)
+                else:
+                    common_keyboard.release(item)
+                    past_keycodes.remove(item)
+            elif isinstance(item, str):
+                # compatibility
+                Type.write(item)
             else:
                 print("Unkown action", item)
-        # release all
-        for item in sequence:
-            if isinstance(item, MacroAction):
-                item.release()
     else:
         # Release any still-pressed keys
         for item in sequence:
+            if isinstance(item, MacroAction):
+                item.release()
+            # compatibility
             if isinstance(item, int) and item >= 0:
-                macropad.keyboard.release(item)
+                common_keyboard.release(item)
         if key_number < 12: # No pixel for encoder button
             macropad.pixels[key_number] = apps[app_index].macros[key_number][0]
             macropad.pixels.show()
