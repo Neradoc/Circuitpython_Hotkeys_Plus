@@ -166,10 +166,7 @@ while True:
         if key_number < 12: # No pixel for encoder button
             macropad.pixels[key_number] = 0xFFFFFF
             macropad.pixels.show()
-        past_items = []
-        past_keycodes = set()  # for compatibility
         for index,item in enumerate(sequence):
-            past_items.append(item)
             if item == 0:
                 for item in sequence:
                     if isinstance(item, MacroAction):
@@ -184,10 +181,8 @@ while True:
                 # compatibility
                 if item > 0:
                     macropad.keyboard.press(item)
-                    past_keycodes.add(item)
                 else:
                     macropad.keyboard.release(item)
-                    past_keycodes.remove(item)
             elif isinstance(item, str):
                 # compatibility
                 Type.write(item)
